@@ -21,6 +21,7 @@
         volume:
           - ./named.conf.local:/etc/bind/named.conf.local:Z
           - ./db.test.devel:/etc/bind/db.test.devel:Z
+          - ./db.10.1.0:/etc/bind/db.10.1.0:Z
           - ./cache:/var/cache/bind:Z
 
 

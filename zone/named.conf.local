@@ -1,1 +1,2 @@
 zone "test.devel" { type master; file "/etc/bind/db.test.devel"; };
+zone "0.1.10.in-addr.arpa" { type master; notify no; file "/etc/bind/db.10.1.0";};
