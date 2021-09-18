@@ -1,0 +1,1 @@
+zone "test.devel" { type master; file "/etc/bind/db.test.devel"; };

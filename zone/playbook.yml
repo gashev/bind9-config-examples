@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Create zone-example podman network
+      containers.podman.podman_network:
+        name: zone-example
+        internal: false
+        ip_range: 10.1.0.0/24
+        subnet: 10.1.0.0/24
+        gateway: 10.1.0.1
+
+    - name: Run container bind9
+      containers.podman.podman_container:
+        name: zone-example
+        image: localhost/bind9
+        state: started
+        network:
+          - zone-example
+        ip: 10.1.0.4
+        volume:
+          - ./named.conf.local:/etc/bind/named.conf.local:Z
+          - ./db.test.devel:/etc/bind/db.test.devel:Z
+          - ./cache:/var/cache/bind:Z
+
+
