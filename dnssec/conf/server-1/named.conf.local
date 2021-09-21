@@ -1,0 +1,7 @@
+zone "test.devel" { 
+	type master; 
+	file "/etc/bind/db.test.devel.signed";
+	allow-transfer { 10.2.1.6; };
+	allow-update { none; };
+};
+

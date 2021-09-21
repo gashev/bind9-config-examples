@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+  connection: local
+  vars:
+    volumes: ['./server-1/cache:/var/cache/bind:Z']
+  tasks:
+    - name: Create dnssec-example podman network
+      containers.podman.podman_network:
+        name: dnssec-example
+        internal: false
+        ip_range: 10.2.1.0/24
+        subnet: 10.2.1.0/24
+        gateway: 10.2.1.1
+
+    - name: Build volumes
+      set_fact:
+        volumes: "{{volumes}} + ['./server-1/conf/{{ item|basename }}:/etc/bind/{{ item|basename }}:Z']"
+      with_items: "{{ lookup('fileglob', './server-1/conf/*', wantlist=True) }}"
+
+    - name: debug volumes
+      debug: var=volumes
+
+ 
+    - name: Run container server-1
+      containers.podman.podman_container:
+        name: server-1
+        image: localhost/bind9
+        state: started
+        network:
+          - dnssec-example
+        ip: 10.2.1.4
+        volume: "{{volumes}}"
+
