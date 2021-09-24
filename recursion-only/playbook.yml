@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Create recursion-only-example podman network
+      containers.podman.podman_network:
+        name: recursion-only-example
+        internal: false
+        ip_range: 10.2.2.0/24
+        subnet: 10.2.2.0/24
+        gateway: 10.2.2.1
+
+    - name: Run container server
+      containers.podman.podman_container:
+        name: server
+        image: localhost/bind9
+        state: started
+        network:
+          - recursion-only-example
+        ip: 10.2.2.4
+        volume:
+          - ./named.conf.options:/etc/bind/named.conf.options:Z
+          - ./cache:/var/cache/bind:Z
+
