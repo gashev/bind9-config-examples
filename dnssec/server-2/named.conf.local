@@ -1,0 +1,7 @@
+zone "test.devel" { 
+	type slave; 
+	file "db.test.devel.signed";
+	masters { 10.2.1.4; };
+	allow-notify { 10.2.1.4; };
+};
+
