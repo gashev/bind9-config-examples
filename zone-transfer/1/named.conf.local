@@ -1,0 +1,17 @@
+zone "test.devel" { 
+	type master; 
+	file "/etc/bind/db.test.devel"; 
+	notify yes;
+	allow-transfer {
+		10.6.0.5; 
+	};
+};
+
+zone "0.6.10.in-addr.arpa" { 
+	type master; 
+	file "/etc/bind/db.10.6.0";
+	notify yes;
+	allow-transfer {
+		10.6.0.5; 
+	};
+};

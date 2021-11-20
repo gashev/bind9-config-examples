@@ -1,0 +1,39 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Create zone-transfer-example podman network
+      containers.podman.podman_network:
+        name: zone-transfer-example
+        internal: false
+        ip_range: 10.6.0.0/24
+        subnet: 10.6.0.0/24
+        gateway: 10.6.0.1
+
+    - name: Run first container bind9
+      containers.podman.podman_container:
+        name: server-1
+        image: localhost/bind9
+        state: started
+        network:
+          - zone-transfer-example
+        ip: 10.6.0.4
+        volume:
+          - ./1/named.conf.local:/etc/bind/named.conf.local:Z
+          - ./1/db.test.devel:/etc/bind/db.test.devel:Z
+          - ./1/db.10.6.0:/etc/bind/db.10.6.0:Z
+          - ./1/cache:/var/cache/bind:Z
+
+    - name: Run second container bind9
+      containers.podman.podman_container:
+        name: server-2
+        image: localhost/bind9
+        state: started
+        network:
+          - zone-transfer-example
+        ip: 10.6.0.5
+        volume:
+          - ./2/named.conf.local:/etc/bind/named.conf.local:Z
+          - ./2/cache:/var/cache/bind:Z
+
+
