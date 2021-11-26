@@ -1,0 +1,14 @@
+$TTL 604800
+$ORIGIN 1.7.10.in-addr.arpa.
+@	IN	SOA	ns.a.domain. root.a.domain. (
+			      2		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	ns.a.domain.
+
+$GENERATE 1-126 $ IN CNAME $.1-126.1.7.10.in-addr.arpa.
+
+

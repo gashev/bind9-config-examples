@@ -1,0 +1,14 @@
+zone "c.domain." { 
+	type master; 
+	file "/etc/bind/db.c.domain"; 
+};
+
+zone "1.7.10.in-addr.arpa." { 
+	type master; 
+	file "/etc/bind/db.10.7.1";
+};
+
+zone "193-254.1.7.10.in-addr.arpa." { 
+	type master; 
+	file "/etc/bind/db.10.7.1.193-254";
+};

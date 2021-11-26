@@ -1,0 +1,83 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Create rfc2317 podman network
+      containers.podman.podman_network:
+        name: rfc2317
+        internal: false
+        ip_range: 10.7.0.0/16
+        subnet: 10.7.0.0/16
+        gateway: 10.7.0.1
+
+    - name: Create cache directories.
+      ansible.builtin.file:
+        path: "{{ item }}/cache"
+        state: directory
+        mode: '0750'
+        owner: '105'
+        group: '106'
+      loop:
+        - domain
+        - a.domain
+        - b.domain
+        - c.domain
+
+    - name: Run domain container
+      containers.podman.podman_container:
+        name: domain
+        image: localhost/bind9
+        state: started
+        network:
+          - rfc2317
+        ip: 10.7.0.2
+        volume:
+          - ./domain/named.conf.local:/etc/bind/named.conf.local:Z
+          - ./domain/db.domain:/etc/bind/db.domain:Z
+          - ./domain/db.10.7.1:/etc/bind/db.10.7.1:Z
+          - ./domain/cache:/var/cache/bind:Z
+
+    - name: Run a.domain container
+      containers.podman.podman_container:
+        name: a.domain
+        image: localhost/bind9
+        state: started
+        network:
+          - rfc2317
+        ip: 10.7.1.1
+        volume:
+          - ./a.domain/named.conf.local:/etc/bind/named.conf.local:Z
+          - ./a.domain/db.a.domain:/etc/bind/db.a.domain:Z
+          - ./a.domain/db.10.7.1:/etc/bind/db.10.7.1:Z
+          - ./a.domain/db.10.7.1.1-126:/etc/bind/db.10.7.1.1-126:Z
+          - ./a.domain/cache:/var/cache/bind:Z
+
+    - name: Run b.domain container
+      containers.podman.podman_container:
+        name: b.domain
+        image: localhost/bind9
+        state: started
+        network:
+          - rfc2317
+        ip: 10.7.1.129
+        volume:
+          - ./b.domain/named.conf.local:/etc/bind/named.conf.local:Z
+          - ./b.domain/db.b.domain:/etc/bind/db.b.domain:Z
+          - ./b.domain/db.10.7.1:/etc/bind/db.10.7.1:Z
+          - ./b.domain/db.10.7.1.129-190:/etc/bind/db.10.7.1.129-190:Z
+          - ./b.domain/cache:/var/cache/bind:Z
+
+    - name: Run c.domain container
+      containers.podman.podman_container:
+        name: c.domain
+        image: localhost/bind9
+        state: started
+        network:
+          - rfc2317
+        ip: 10.7.1.193
+        volume:
+          - ./c.domain/named.conf.local:/etc/bind/named.conf.local:Z
+          - ./c.domain/db.c.domain:/etc/bind/db.c.domain:Z
+          - ./c.domain/db.10.7.1:/etc/bind/db.10.7.1:Z
+          - ./c.domain/db.10.7.1.193-254:/etc/bind/db.10.7.1.193-254:Z
+          - ./c.domain/cache:/var/cache/bind:Z

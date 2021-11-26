@@ -1,0 +1,15 @@
+$ORIGIN b.domain.
+$TTL	604800
+@	IN	SOA	ns.b.domain. root.b.domain. (
+			      2		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	ns
+@	IN	A	10.7.1.129
+ns	IN	A	10.7.1.129
+host1	IN	A	10.7.1.129
+host2	IN	A	10.7.1.130
+host3	IN	A	10.7.1.131
