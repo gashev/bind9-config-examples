@@ -9,7 +9,7 @@ $ORIGIN 193-254.1.7.10.in-addr.arpa.
 ;
 @	IN	NS	ns.c.domain.
 
-194	IN	PTR	host1.c.domain.
-195	IN	PTR	host2.c.domain.
-196	IN	PTR	host3.c.domain.
+193	IN	PTR	host1.c.domain.
+194	IN	PTR	host2.c.domain.
+195	IN	PTR	host3.c.domain.
 

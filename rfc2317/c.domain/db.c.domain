@@ -10,6 +10,6 @@ $TTL	604800
 @	IN	NS	ns
 @	IN	A	10.7.1.193
 ns	IN	A	10.7.1.193
-host1	IN	A	10.7.1.194
-host2	IN	A	10.7.1.195
-host3	IN	A	10.7.1.196
+host1	IN	A	10.7.1.193
+host2	IN	A	10.7.1.194
+host3	IN	A	10.7.1.195
