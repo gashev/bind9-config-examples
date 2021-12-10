@@ -18,6 +18,9 @@ class DnsTest(unittest.TestCase):
             self._testResolve(ip, 'test.devel', 'NS', ['ns1.test.devel.', 'ns2.test.devel.'])
             self._testResolve(ip, 'ns1.test.devel', 'A', ['10.6.0.4'])
             self._testResolve(ip, 'ns2.test.devel', 'A', ['10.6.0.5'])
+            self._testResolve(ip, 'test.devel', 'A', ['10.6.0.4'])
+            self._testResolve(ip, 'www.test.devel', 'CNAME', ['test.devel.'])
+            self._testResolve(ip, 'www.test.devel', 'A', ['10.6.0.4'])
             self._testResolve(ip, dns.reversename.from_address('10.6.0.4'), 'PTR', ['ns1.test.devel.'])
             self._testResolve(ip, dns.reversename.from_address('10.6.0.5'), 'PTR', ['ns2.test.devel.'])
 
