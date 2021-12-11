@@ -1,0 +1,51 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Create tsig podman network
+      containers.podman.podman_network:
+        name: tsig
+        internal: false
+        ip_range: 10.6.0.0/24
+        subnet: 10.6.0.0/24
+        gateway: 10.6.0.1
+
+    - name: Create cache directories.
+      ansible.builtin.file:
+        path: "{{ item }}/cache"
+        state: directory
+        mode: '0750'
+        owner: '105'
+        group: '106'
+        recurse: True
+      loop:
+        - server-1
+        - server-2
+
+    - name: Run first container bind9
+      containers.podman.podman_container:
+        name: server-1
+        image: docker.io/internetsystemsconsortium/bind9:9.16
+        state: started
+        network:
+          - tsig
+        ip: 10.6.0.4
+        volume:
+          - ./server-1/named.conf.local:/etc/bind/named.conf.local:Z
+          - ./server-1/db.test.devel:/etc/bind/db.test.devel:Z
+          - ./server-1/db.10.6.0:/etc/bind/db.10.6.0:Z
+          - ./server-1/cache:/var/cache/bind:Z
+            
+    - name: Run second container bind9
+      containers.podman.podman_container:
+        name: server-2
+        image: docker.io/internetsystemsconsortium/bind9:9.16
+        state: started
+        network:
+          - tsig
+        ip: 10.6.0.5
+        volume:
+          - ./server-2/named.conf.local:/etc/bind/named.conf.local:Z
+          - ./server-2/cache:/var/cache/bind:Z
+ 
+
