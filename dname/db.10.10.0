@@ -1,0 +1,15 @@
+$ORIGIN 0.10.10.in-addr.arpa.
+$TTL    604800
+@       IN      SOA     ns.test.devel. root.test.devel. (
+                              2         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      ns.test.devel.
+4	IN      PTR     ns.test.devel.
+4	IN      PTR     test.devel.
+5	IN      PTR     services.test.devel.
+6	IN	PTR	test1.bar.test.devel.
+7	IN	PTR	test2.bar.test.devel.

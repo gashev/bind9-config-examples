@@ -1,0 +1,36 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Create dname-example podman network
+      containers.podman.podman_network:
+        name: dname-example
+        internal: false
+        ip_range: 10.10.0.0/24
+        subnet: 10.10.0.0/24
+        gateway: 10.10.0.1
+
+    - name: Create cache directory.
+      ansible.builtin.file:
+        path: "cache"
+        state: directory
+        mode: '0750'
+        owner: '105'
+        group: '106'
+        recurse: True
+ 
+    - name: Run container bind9
+      containers.podman.podman_container:
+        name: dname
+        image: localhost/bind9
+        state: started
+        network:
+          - dname-example
+        ip: 10.10.0.4
+        volume:
+          - ./named.conf.local:/etc/bind/named.conf.local:Z
+          - ./db.test.devel:/etc/bind/db.test.devel:Z
+          - ./db.10.10.0:/etc/bind/db.10.10.0:Z
+          - ./cache:/var/cache/bind:Z
+
+
